@@ -1,15 +1,66 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
-    public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+import java.util.*;
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+import java.sql.*;
+
+import static java.lang.Class.forName;
+
+public class Main{
+    public static void main(String[]args){
+       Scanner sc=new Scanner(System.in);
+       try{
+           //Load My sql
+           Class.forName("com.mysql.cj.jdbc.Driver");
+           //Connect mysql
+           Connection con = DriverManager.getConnection(
+                   "jdbc:mysql://localhost:3306/",
+                   "root",
+                   "Nandhu07"
+           );
+           Statement stmt=con.createStatement();
+           stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS students_db");
+           System.out.println("DataBase Created Successfully");
+           stmt.executeUpdate("Use students_db");
+
+           String createTable="CREATE TABLE IF NOT EXISTS students_db("+ "id INT PRIMARY KEY, " +
+           "name VARCHAR(50)," +
+           "age INT" + ")";
+
+           stmt.executeUpdate(createTable);
+           System.out.println("created successfully");
+
+           System.out.println("id");
+           int id=sc.nextInt();
+           sc.nextLine();
+           System.out.println("Enter name");
+           String name=sc.nextLine();
+           System.out.println("Enter age");
+           int age =sc.nextInt();
+           sc.nextLine();
+           // insert
+           String insertQuery = "INSERT INTO students_db(id,name,age) VALUES(?,?,?)" ;
+           PreparedStatement ps = con.prepareStatement(insertQuery);
+           ps.setInt(1,id);
+           ps.setString(2,name);
+           ps.setInt(3,age);
+
+           int rows = ps.executeUpdate();
+
+           if (rows > 0) {
+               System.out.println("Student details inserted successfully");
+           }
+           ResultSet rs = stmt.executeQuery("SELECT * FROM student_db");
+           System.out.println("\nStudent Details:");
+           while (rs.next()) {
+               System.out.println(
+                       rs.getInt("id") + " " +
+                               rs.getString("name") + " " +
+                               rs.getInt("age")
+               );
+           }
+           con.close();
+           sc.close();
+       }catch (Exception e){
+           System.out.println(e);
+       }
     }
 }
