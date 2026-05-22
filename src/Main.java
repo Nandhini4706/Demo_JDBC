@@ -36,7 +36,7 @@ public class Main{
            System.out.println("Enter age");
            int age =sc.nextInt();
            sc.nextLine();
-           // insert
+           // insert query
            String insertQuery = "INSERT INTO students_db(id,name,age) VALUES(?,?,?)" ;
            PreparedStatement ps = con.prepareStatement(insertQuery);
            ps.setInt(1,id);
@@ -48,7 +48,7 @@ public class Main{
            if (rows > 0) {
                System.out.println("Student details inserted successfully");
            }
-           ResultSet rs = stmt.executeQuery("SELECT * FROM student_db");
+           ResultSet rs = stmt.executeQuery("SELECT * FROM students_db");
            System.out.println("\nStudent Details:");
            while (rs.next()) {
                System.out.println(
